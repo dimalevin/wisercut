@@ -1,0 +1,127 @@
+<!-- companies-index -->
+<div id="inner" class="container-fluid">
+    <table id="companies-index"
+           data-search="true"
+           data-search-align="left"
+           data-stickyHeader="true"
+           data-show-columns="true"
+           data-show-toggle="true"
+           data-mobile-responsive="true"
+           data-show-fullscreen="true"
+           data-sort-class="table-active"
+           data-sortable="true"
+           data-pagination="true"
+           data-pagination-pre-text="Previous"
+           data-pagination-next-text="Next"
+           data-pagination-h-align="left"
+           data-pagination-detail-h-align="right"
+           data-page-list="[10, 25, 50, 100, ALL]"
+           data-show-footer="false"
+           data-filter-control="true"
+           data-show-search-clear-button="true"
+           data-show-export="true"
+           data-click-to-select="true"
+           data-show-print="true"
+           data-row-attributes="rowAttributes"
+           >
+        <thead class="thead-dark">
+            <tr>       
+                <th data-field="name" data-sortable="true" 
+                    data-cell-style="cellStyle" data-filter-control="select" 
+                    data-formatter="logoFormatter" data-align="center">Name
+                </th>
+                <th data-field="description" data-visible="false">Description</th>
+                <th data-field="specialties" data-sortable="false" data-formatter="specialtiesFormatter" data-align="center">Specialties</th>
+                <th data-field="score" data-sortable="true" data-align="center" data-cell-style="cellStyle">Score</th>
+                <th data-field="date_approved" data-sortable="true" data-formatter="dateFormatter" data-align="center">Member Since</th>
+                <th data-field="total_questions" data-sortable="true" data-align="center">Questions Received</th>                     
+                <th data-field="total_advices_given" data-sortable="true" data-align="center">Advices Given</th>
+                <th data-field="total_responses_received" data-sortable="true" data-align="center">Responses Received</th>
+                <th data-field="total_best_advices" data-sortable="true" data-align="center">Best Advices</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<script>
+    
+    // Cell styles
+    function cellStyle(value, row, index, field) {
+        var classes = [
+            'bg-blue',
+            'bg-green',
+            'bg-orange',
+            'bg-yellow',
+            'bg-red'
+        ];
+
+        if (value >= 8) {
+            return {
+                classes: classes[1],
+                css: {"color": "#fff", "font-weight": "bold"}
+            };
+        }
+        else if(value<1){
+            value="not rated";
+            return {
+                classes: "not-rated",
+                css: {"color": "#ffffff00", "text-align":"left! important"}
+            };
+        }
+        else if (value <= 4) {
+            return {
+                classes: classes[4],
+                css: {"color": "#fff", "font-weight": "bold"}
+            };
+        } else if (field === "name") {
+            return {
+                classes: "name-info"
+            };
+        }
+        return {};
+    }
+    
+    // Row attributes
+    function rowAttributes(row, index) {
+        return {
+            'data-toggle': 'popover',
+            'data-placement': 'auto',
+            'data-trigger': 'hover',
+            'data-content': [
+                'Description: ' + row.description
+            ].join(', ')
+        };
+    }
+
+    // Company logo formatter
+    function logoFormatter(value, row) {
+        return '<img class="img-responsive company-logo" src="Content/images/companies_logos/' + row.logo + '" />' + '<span>' + value + '</span>';
+    }
+    
+    // Date cell formatter
+    function dateFormatter(value, row) {
+        var date = new Date(value);
+        return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+    }
+    
+    // Specialties cell formatter
+    function specialtiesFormatter(value, row) {
+        if (value) {
+            var specialties = value.split(" ");
+            var icons = "";
+            for (var i = 0; i < specialties.length; i++) {
+                icons += '<img class="img-responsive specialties" alt="' + specialties[i] + '" title="' + specialties[i] + '" src="Content/images/icons/' + specialties[i].toLowerCase() + '.png" />';
+            }
+            return icons;
+        }
+    }
+    
+    // Company description popover
+    $(function () {
+        $('#companies-index,#companies-admin').on('post-body.bs.table', function () {
+            $('[data-toggle="popover"]').popover({
+                selector: '.name-info'
+            });
+        });
+
+    });
+</script>

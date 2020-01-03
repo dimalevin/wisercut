@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab|Russo+One|Archivo+Black|Orbitron:500&display=swap');
+//display settings
+$break-small: 576px;
+$break-large: 1200px;
+$footer-height:70px;
+//fonts
+$font-main: 'Roboto Slab', serif;
+$font-menu: 'Russo One', sans-serif;
+$font-title: 'Archivo Black', sans-serif;
+$font-table: 'Orbitron', sans-serif;
+$font-size-menu: 1.1rem;
+$font-size-menu-mobi: 1.5rem;
+$font-input:1.25rem;
+$font-size-body:16px;
+//navbar
+$navbar-background: #cdcdcd;
+$menu-links-hover: #afaeae;
+$border-radius: 5px;
+//slider
+$mobile-img-height:200px;
+//icons
+$home-icon-size:26px;
+
+//colors
+$menu-color:#1973B2;
+$dominant-color:#fff;
+$btn-hover:#495A74;
+$footer-background:#4b4c4d;
+$title-color:#4b4c4d;
+$label-color:#1973B2;

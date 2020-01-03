@@ -1,0 +1,195 @@
+<!-- companies -admin -->
+<table id="companies-admin"
+       data-search="true"
+       data-search-align="left"
+       data-stickyHeader="true"
+       data-show-columns="true"
+       data-show-toggle="true"
+       data-mobile-responsive="true"
+       data-show-fullscreen="true"
+       data-sort-class="table-active"
+       data-sortable="true"
+       data-pagination="true"
+       data-pagination-pre-text="Previous"
+       data-pagination-next-text="Next"
+       data-pagination-h-align="left"
+       data-pagination-detail-h-align="right"
+       data-page-list="[10, 25, 50, 100, ALL]"
+       data-show-footer="false"
+       data-filter-control="true"
+       data-show-search-clear-button="true"
+       data-show-export="true"
+       data-click-to-select="true"
+       data-show-print="true"
+       data-row-attributes="rowAttributes"
+       >
+    <thead class="thead-dark">
+        <tr>
+            <th data-field="name" data-sortable="true" 
+                data-cell-style="cellStyle" data-filter-control="select" 
+                data-formatter="logoFormatter" data-align="center" rowspan="2">Company Name
+            </th>
+            <th data-field="description" data-visible="false" rowspan="2">Description</th>
+            <th data-field="date_approved" data-align="center" data-formatter="dateFormatter" rowspan="2">Date Approved</th>
+            <th data-field="specialties" data-sortable="false" rowspan="2" data-align="center" data-formatter="specialtiesFormatter">Specialties</th>
+            <th data-field="score" data-sortable="true" rowspan="2" data-align="center" data-cell-style="cellStyle">Score</th>
+            <th data-field="is_approved" data-sortable="true" rowspan="2" data-formatter="approvedFormatter" data-align="center">Approved</th>
+            <th data-field="is_blocked" data-sortable="true" rowspan="2" data-formatter="blockFormatterCompany" data-align="center">Blocked</th>
+            <th colspan="6" data-align="center">Manager Details</th>      
+        </tr>
+        <tr>
+            <th data-field="manager_details.picture" data-formatter="managerFormatter" data-align="center">Photo</th>
+            <th data-field="manager_details.name" data-sortable="true" 
+                data-cell-style="cellStyle"
+                data-align="center" data-filter-control="input">Name
+            </th>
+            <th data-field="manager_details.username" data-sortable="true" data-align="center">Username</th>
+            <th data-field="manager_details.email" data-sortable="true" data-align="center">Email</th>                 
+            <th data-field="manager_details.is_approved" data-sortable="true" data-formatter="approvedFormatterUser" data-align="center">Approved</th>
+            <th data-field="manager_details.is_blocked" data-sortable="true" data-formatter="blockFormatterUser" data-align="center">Blocked</th>
+        </tr>
+    </thead>
+</table>
+<script>
+    
+    // Cell styles
+    function cellStyle(value, row, index, field) {
+        var classes = [
+            'bg-blue',
+            'bg-green',
+            'bg-orange',
+            'bg-yellow',
+            'bg-red'
+        ];
+
+        if (value >= 8 && field === 'score') {
+            return {
+                classes: classes[1],
+                css: {'color': '#fff', 'font-weight': 'bold'}
+            };
+        } else if (value < 1 && field === 'score') {
+            value = "not rated";
+            return {
+                classes: "not-rated",
+                css: {"color": "#ffffff00", "text-align": "left! important"}
+            };
+        } else if (field === "name") {
+            return {
+                classes: "name-info"
+            };
+        }
+        if (value <= 4 && field === 'score') {
+            return {
+                classes: classes[4],
+                css: {'color': '#fff', 'font-weight': 'bold'}
+            };
+        }
+        return {};
+    }
+    
+    // Approved cell formatter -company
+    function approvedFormatter(value, row) {
+        if (value === true) {
+            return '<i class="fa fa-check-square-o" aria-hidden="true"></i><span class="d-none">Yes</span>';
+        } else {
+            if (row.manager_details.is_approved) {
+                return '<span class="d-none">No</span><button type="button" class="btn approve-company btn-success" data-userID=' + row.id + '>Approve</button>';
+            }
+            else{
+                 return '<span class="d-none">No</span><button type="button" class="btn approve-company btn-success disabled" data-userID=' + row.id + '>Approve</button>';
+            }
+        }
+    }
+    
+    // Approved cell formatter -user
+    function approvedFormatterUser(value, row) {
+        if (row.manager_details.is_approved === true) {
+            return '<i class="fa fa-check-square-o" aria-hidden="true"></i><span class="d-none">Yes</span>';
+        } else {
+            return '<span>No</span>';
+        }
+    }
+    
+    // Blocked cell formatter -company
+    function blockFormatterCompany(value, row) {
+        if (value === true) {
+            return '<span class="d-none">Yes</span><button type="button" class="unblock-company btn btn-success" data-userID=' + row.id + '>Unblock</button>';
+        } else {
+            if (row.is_approved) {
+                return '<span class="d-none">No</span><button type="button" class="block-company btn btn-danger" data-userID=' + row.id + '>Block</button>';
+            } else {
+                return '<span class="d-none">No</span><button type="button" class="block-company btn disabled" data-userID=' + row.id + '>Block</button>';
+            }
+        }
+    }
+    
+    // Blocked cell formatter -user
+    function blockFormatterUser(value, row) {
+        if (value === true) {
+            return '<span class="d-none">Yes</span><button type="button" class="unblock-user btn btn-success" data-userID=' + row.manager_details.id + '>Unblock</button>';
+        } else {
+            if (row.manager_details.is_approved == true) {
+                return '<span class="d-none">No</span><button type="button" class="block-user btn btn-danger" data-userID=' + row.manager_details.id + '>Block</button>';
+            } else {
+                return '<span class="d-none">No</span><button type="button" class="block-user btn disabled" data-userID=' + row.manager_details.id + '>Block</button>';
+            }
+        }
+
+    }
+    
+    // Company logo cell formatter
+    function logoFormatter(value, row) {
+        if (row && row.logo) {
+            return '<img class="img-responsive company-logo" src="Content/images/companies_logos/' + row.logo + '" />' + '<span>' + value + '</span>';
+        }
+    }
+    
+    // Date cell formatter
+    function dateFormatter(value, row) {
+        var date = new Date(value);
+        if (!isNaN(date.getTime())) {
+            return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+        } else {
+            return "-";
+        }
+    }
+    
+    // Company manager image formatter
+    function managerFormatter(value, row) {
+        return '<img class="img-responsive user-picture d-block" src="Content/images/user_pictures/' + value + '" />';
+    }
+    
+    // Rows attributes
+    function rowAttributes(row, index) {
+        return {
+            'data-toggle': 'popover',
+            'data-placement': 'auto',
+            'data-trigger': 'hover',
+            'data-content': [
+                'Description: ' + row.description
+            ].join(', ')
+        };
+    }
+    
+    // Format specialties field
+    function specialtiesFormatter(value, row) {
+        if (value) {
+            var specialties = value.split(" ");
+            var icons = "";
+            for (var i = 0; i < specialties.length; i++) {
+                icons += '<img class="img-responsive specialties" alt="' + specialties[i] + '" title="' + specialties[i] + '" src="Content/images/icons/' + specialties[i].toLowerCase() + '.png" />';
+            }
+            return icons;
+        }
+    }
+    
+    // Company description popover
+    $(function () {
+        $('#companies-index,#companies-admin').on('post-body.bs.table', function () {
+            $('[data-toggle="popover"]').popover({
+                selector: '.name-info'
+            });
+        });
+
+    });
+</script>

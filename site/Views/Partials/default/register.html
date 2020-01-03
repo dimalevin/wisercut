@@ -1,0 +1,81 @@
+<!-- register form -->
+<h1>Registration</h1>
+<div class="row register">
+    <div class="col-md-4 col-12 mx-auto py-sm-3 py-md-3" id="registration-form">
+        <div class="form-group">
+            <label for="usertype">User Type:</label>
+            <select class="form-control text-uppercase" id="usertype">
+                <option value="asking">Asking User</option>
+                <option value="advising">Advising User</option>
+                <option value="company">Company</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="user">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="pwd" name="password" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+            <label for="pwd_confirm">Confirm Password:</label>
+            <input type="password" class="form-control" id="pwd_confirm" name="password_confirm" autocomplete="new-password">
+        </div>
+        <div class="card">
+            <div class="contact-person company d-none card-header">
+                <a class="card-link collapsed" data-toggle="collapse" href="#section1" aria-expanded="false">Contact Person 
+                    <i class="fa float-right" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div id="section1" class="collapse show" data-parent="#registration-form">
+                <div class="form-group single-user ">
+                    <label for="firstname">First Name:</label>
+                    <input type="text" class="form-control" id="firstname" name="firstname" autocomplete="off">
+                </div>
+                <div class="form-group single-user ">
+                    <label for="lastname">Last Name:</label>
+                    <input type="text" class="form-control" id="lastname" name="lastname" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" autocomplete="off">
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="company-details company d-none card-header">
+                <a class="card-link collapsed" data-toggle="collapse" href="#section2" aria-expanded="false">
+                    Company Details
+                    <i class="fa float-right" aria-hidden="true"></i>
+                </a>
+            </div> 
+            <div id="section2" class="collapse" data-parent="#registration-form">
+                <div class="form-group d-none company">
+                    <label for="company">Company:</label>
+                    <input type="text" class="form-control" id="company" name="company" autocomplete="off">
+                </div>
+                <div class="form-group d-none company">
+                    <label for="description">Company Description:</label>
+                    <textarea class="form-control" id="description" name="description" maxlength="400"></textarea>
+                    <div id="txt-input-counter"></div>
+                </div>
+                <div id="specialties" class="d-none company">
+                    <label for="specialties" id="spec-label">Select Fields of Interests:</label>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn my-sm-3 my-md-3 col-md-12 col-12" id="register">Register</button>
+    </div>
+</div>
+<script>
+    
+    // Text field length set
+    $(function () {
+        $('#section2').click(function () {
+            $('#txt-input-counter').html($('#description').val().length + '/400');
+        });
+    });
+</script>
+
+

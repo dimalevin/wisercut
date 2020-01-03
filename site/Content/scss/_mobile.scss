@@ -1,0 +1,164 @@
+@import "_variables.scss";
+@media screen and (max-width: $break-small) {
+    //navbar
+    .navbar-toggler {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    .navbar-dark {
+        padding: 0 1rem;
+        #collapse-mobile{
+            margin: 0 -1rem;
+        }
+        .main-menu{
+            .nav-item{
+                &.active{
+                    background: -moz-linear-gradient(90deg, rgba(84,84,84,1) 0%, rgba(255,255,255,1) 50%, rgba(69,69,69,1) 100%); /* ff3.6+ */
+                    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(69,69,69,1)), color-stop(50%, rgba(255,255,255,1)), color-stop(100%, rgba(84,84,84,1))); /* safari4+,chrome */
+                    background: -webkit-linear-gradient(90deg, rgba(84,84,84,1) 0%, rgba(255,255,255,1) 50%, rgba(69,69,69,1) 100%); /* safari5.1+,chrome10+ */
+                    background: -o-linear-gradient(90deg, rgba(84,84,84,1) 0%, rgba(255,255,255,1) 50%, rgba(69,69,69,1) 100%); /* opera 11.10+ */
+                    background: -ms-linear-gradient(90deg, rgba(84,84,84,1) 0%, rgba(255,255,255,1) 50%, rgba(69,69,69,1) 100%); /* ie10+ */
+                    background: linear-gradient(0deg, rgba(84,84,84,1) 0%, rgba(255,255,255,1) 50%, rgba(69,69,69,1) 100%); /* w3c */
+                    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#454545', endColorstr='#545454',GradientType=0 ); /* ie6-9 */
+                }
+                .nav-link {
+                    color: $menu-color;
+                    font-size:$font-size-menu-mobi;
+                    padding: 0.5rem 1rem;
+                    border-bottom: 1px solid $menu-color;
+                    &:hover{
+                        background: transparent;
+                    }
+                }
+            }
+        }
+    }
+    .navbar-brand{
+        margin-right: 5rem;
+        img{
+            vertical-align: text-bottom;
+            margin-bottom: 5px;
+        }
+    }
+
+    //slider
+    #home-pic{
+        min-height: $mobile-img-height;
+        max-height: $mobile-img-height;
+    }
+    #inner{
+        min-height: 100vh;
+        .columns{
+            float:none !important;
+        }
+        .search{
+            width:100%;
+        }
+        #companies-index,#users-admin,#questions-admin,#messages-in,#advice-table,#companies-asking,#questions-asking,#users-company,#messages-out,#companies-admin{
+            .company-logo,.user-picture{
+                display:none;
+            }
+            tr{
+                .card-views{
+                    .card-view{
+                        max-width:85%;
+                        display:block;
+                        .card-view-title{
+                            color:$menu-color;
+                            margin-top:10px;
+                            margin-bottom:10px;
+                        }
+                    }
+                    .card-view-value{
+                        min-width:15%;
+                        display:block;
+
+                    }
+                }
+            }
+
+        }
+        .wrap-messages ul.tabs li a{
+            font-size:13px;
+            margin-top: 28px;
+            &.active{
+                padding: 7px 0 20px 0;
+            }
+        }
+        .wrap-messages .send-message {
+            padding: 25px 5% 40%;
+            #body{
+                margin-top: 20px;
+            }
+        }
+    }
+    h1{
+        margin-top:0!important;
+    }
+    h2{
+        margin-top: 10px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    #main-content{
+        min-height: 56vh;
+    }
+    .footer {
+        position:absolute;
+    }
+    table{
+        font-size:1.25rem;
+    }
+    .fixed-table-toolbar{
+        width:100%;
+        .columns{
+            width:100%;
+            button[name=toggle]{
+                display:none;
+
+            }
+        }
+    }
+    #settings{
+        min-height: 100vh;
+        label{
+            width:70%;
+        }
+        #send-settings,#discard-settings{
+            width:45%;
+            margin-bottom: 5%;
+            margin-top: 5%;
+            float:none!important;
+            margin: 2%;
+        }
+        .toggle{
+            width:20%!important;
+            .btn-primary{
+                width:70px;
+            }
+        }
+    }
+    #adviserModal,#advicesModal,#advicesModal2{
+        .modal-body {
+            max-height: 100%;
+        }
+        #send-advice{
+            position: relative;
+            width:40%;
+            right:0;
+        }
+    }
+    #add-response{
+        label[for=best-advice]{
+            margin-top: 3.5rem!important;
+        }
+    }
+    .footer{
+        font-size:0.75rem;
+    }
+    #modal__open-question{
+        max-width:100%;
+    }
+    .send-new-message{
+        margin-top:15px;
+    }
+}

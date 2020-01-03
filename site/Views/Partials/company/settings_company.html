@@ -1,0 +1,115 @@
+<!-- settings -company manager -->
+<h1 class="mb-4" style="margin-top:-45px;">Settings</h1>
+<div id="settings" class='col-md-5 col-sm-12 mx-auto p-0'>
+    <button type="button" class="btn btn-primary col-md-12 settings mb-4 collapsed" aria-expanded="false" data-toggle="collapse" data-target="#personal-settings">
+        Personal Settings
+        <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+    <div class='mb-3 form-group collapse' id="personal-settings">
+        <div class="form-group mb-3">
+            <label for="allow-newsletters" class="form-check-label align-middle" data-toggle="tooltip" data-placement="bottom" title="Subscribe for newsletters">Allow newsletters</label>
+            <input class="toggle btn btn-primary btn-sm float-right mb-3" id="allow-newsletters" type="checkbox" data-on="yes" data-off="no" data-toggle="toggle" data-onstyle="primary" data-offstyle="secondary">
+        </div>
+        <div class="form-group mb-3">
+            <label for="duplicate-mail" class="form-check-label align-middle" data-toggle="tooltip" data-placement="bottom" title="Allowing duplicating messages to your email">Duplicate messages to email</label>
+            <input class="toggle btn btn-primary btn-sm float-right" id="duplicate-mail" type="checkbox" data-on="yes" data-off="no" data-toggle="toggle" data-onstyle="primary" data-offstyle="secondary">
+        </div>
+        <div class="form-group mt-3">
+            <label for="firstname">Firstname:</label>
+            <input type="text" name="firstname" class="form-control" id="firstname">  
+        </div>    
+        <div class="form-group mt-3">
+            <label for="lastname">Lastname:</label>
+            <input type="text" name="lastname" class="form-control" id="lastname">
+        </div>   
+        <div class="mb-3">  
+            <div class="col-sm-12 mb-3 preview">
+                <div class="">
+                    <div>
+                        <label for="pic-preview-user">Picture:</label>  
+                    </div>
+                    <div>
+                        <img src="Content/images/no-preview.png" id="pic-preview-user" class="img-thumbnail">
+                    </div>
+                </div>
+                <div class="col-md-12 font-weight-bold pl-0">
+                    <div>Maximum allowed file size: 300 Kb.</div>
+                </div>        
+            </div>
+            <div id="msg"></div>     
+            <form method="post" id="image-form">   
+                <input type="file" name="img[]" class="file" accept=".jpeg,.jpg,.png,.gif" id="file">
+                <div class="input-group my-3">
+                    <input type="text" class="form-control" disabled placeholder="Upload File" id="user-picture">
+                    <div class="input-group-append">
+                        <button type="button" class="browse-manager btn btn-primary">Browse...</button>
+                    </div>
+                </div>  
+            </form>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary col-md-12 settings mb-4 collapsed" data-toggle="collapse" data-target="#company-settings">
+        Company Settings
+        <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+    <div class='mb-3 form-group collapse' id="company-settings">     
+        <div class="form-group mt-4">
+            <label for="company-description">Company description:</label>
+            <textarea name="text" rows="4" class="form-control" maxlength="400" id="company-description"></textarea>
+            <div id="txt-input-counter"></div>
+        </div>
+        <div class="form-group mt-4" id="specialties">
+        </div>
+        <div class="mb-3">     
+            <div id="msg"></div>  
+            <form method="post" id="image-form">
+                <label for="company-logo">Company logo:</label>
+                <input type="file" name="img[]" class="file" accept=".jpeg,.jpg,.png,.gif" id="company-logo">
+                <div class="input-group">
+                    <input type="text" class="form-control" disabled placeholder="Upload File" id="com-logo">
+                    <div class="input-group-append">
+                        <button type="button" class="browse-company btn btn-primary">Browse...</button>
+                    </div>
+                </div>
+            </form>
+        </div> 
+        <div class="col-md-12 mb-3 preview">
+            <img src="Content/images/no-preview.png" id="pic-preview-company" class="img-thumbnail">
+            <div class="col-md-12 font-weight-bold pl-0">
+                <div>Maximum allowed file size: 300 Kb.</div>
+            </div> 
+        </div>
+    </div>
+    <button type="button" id="discard-settings" class="btn btn-danger col-md-3 float-left">CANCEL</button>
+    <button type="button" id="send-settings" class="btn btn-primary col-md-3 float-right">SAVE</button>
+</div>
+<script>
+    
+    // Page setters etc.
+    $(function () {
+
+        $('#txt-input-counter').html($('#company-description').val().length + '/400');
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $('#duplicate-mail,#allow-newsletters').bootstrapToggle();
+
+        $('input[type="file"]').change(function (e) {
+            var preview = "";
+            var fileName = e.target.files[0].name;
+            if ($(this).attr("id") === 'file') {
+                $('#user-picture').val(fileName);
+                preview = $('#pic-preview-user');
+            } else {
+                $('#com-logo').val(fileName);
+                preview = $('#pic-preview-company');
+            }
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                preview.prop('src', e.target.result); // get loaded data and render thumbnail
+            };
+
+            reader.readAsDataURL(this.files[0]); // read the image file as a data URL
+        });
+    });
+</script>

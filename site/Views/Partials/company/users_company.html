@@ -1,0 +1,112 @@
+<!-- settings -company manager -->
+<button type="button" id="modal__addUserCompany" data-toggle="modal" data-target="#user-company" class="btn btn-primary col-md-2">Add User<i style="font-size:30px;" class="fa fa-plus-square-o pl-2 align-middle"></i></button>
+<table id="users-company"
+       data-search="true"
+       data-search-align="left"
+       data-stickyHeader="true"
+       data-show-columns="true"
+       data-show-toggle="true"
+       data-mobile-responsive="true"
+       data-show-fullscreen="true"
+       data-sort-class="table-active"
+       data-sortable="true"
+       data-pagination="true"
+       data-pagination-pre-text="Previous"
+       data-pagination-next-text="Next"
+       data-pagination-h-align="left"
+       data-pagination-detail-h-align="right"
+       data-page-list="[10, 25, 50, 100, ALL]"
+       data-show-footer="false"
+       data-filter-control="true"
+       data-show-search-clear-button="true"
+       data-show-export="true"
+       data-click-to-select="true"
+       data-show-print="true"
+       data-row-attributes="rowAttributes"
+       >
+    <thead class="thead-dark">
+        <tr>
+            <th data-field="name" data-sortable="true" data-cell-style="cellStyle" data-formatter="imageFormatter" data-align="left">Name</th>
+            <th data-field="username" data-sortable="true" data-align="center">Username</th>
+            <th data-field="email" data-sortable="true" data-align="center">Email</th>
+             <th data-field="date_joined" data-sortable="true" data-align="center" data-formatter="dateFormatter">Join Date</th>
+            <th data-field="is_blocked" data-sortable="true" data-formatter="blockFormatter" data-align="center" data-filter-control="select">Is Blocked</th>
+        </tr>
+    </thead>
+</table>
+<div class="modal fade" id="user-company">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add User</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input type="email" class="form-control" name=email placeholder="Enter User Email" required id="usermail">
+                </div>
+            </div>
+            <div class="modal-footer">
+                 <button type="button" id="add-user-company" class="btn float-right col-md-3">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="request-unblock">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Reason to Unblock User</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                   <textarea class="form-control" id="reason" rows="3" placeholder="Type the reason in order to unblock user" required></textarea>  
+                </div>
+            </div>
+            <div class="modal-footer">
+                 <button type="button" id="send-request" class="btn float-right col-md-3">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+    // Cell styles
+    function cellStyle(value, row, index, field) {
+        if (field === "name") {
+            return {
+                classes: "name-info"
+            };
+        }
+        return {};
+    }
+    
+    // Is blocked button formatter
+    function blockFormatter(value, row) {
+        if (value === true) {
+            return '<span class="d-none">Yes</span><button type="button" data-toggle="modal" data-target="#request-unblock" class="btn btn-success user-company-unblock" data-userID=' + row.username + '>Request to Unblock</button>';
+        } else {
+            if (row.is_approved == true) {
+                return '<span class="d-none">No</span><button type="button" class="btn block-user btn-danger" data-userID=' + row.id + '>Block</button>';
+            } else {
+                return '<span class="d-none">No</span><button type="button" class="btn block-user disabled" data-userID=' + row.id + '>Block</button>';
+            }
+        }
+    }
+    
+    // Image cell formatter
+    function imageFormatter(value, row) {
+        return '<img class="img-responsive user-picture" src="Content/images/user_pictures/' + (row.picture ? row.picture : 'default.png') + '" />' + '<span>' + value + '</span>';
+    }
+    
+    // Date cell formatter
+    function dateFormatter(value, row) {
+        var date = new Date(value);
+        return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+    }
+</script>

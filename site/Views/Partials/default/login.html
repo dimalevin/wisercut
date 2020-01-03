@@ -1,0 +1,45 @@
+<!-- login form -->
+<h1>Login</h1>
+<div class="row login">    
+    <div class="col-md-4 col-12 mx-auto py-sm-3 py-md-3 login-form" id="login-form">
+        <div class="form-group">
+            <label for="user">Username:</label>
+            <input type="text" class="form-control" id="user" name="username">
+        </div>
+        <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="pwd" name="password">
+        </div>
+        <div id="forgot-psw" class="underline mb-3">Forgot your password?</div>
+        <button type="button" class="btn my-sm-3 my-md-3 col-md-12 col-12" id="login-user">Login</button>
+    </div>
+    <div class="modal fade" id="modal__recover-psw" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Password Recovery</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-auto col-md-8">
+                    <div class="md-form mb-3 position-relative">
+                        <label for="username">Username</label>
+                        <i class="fa fa-user position-absolute"></i>
+                        <input type="text" id="modal__username" class="form-control" name="username">
+                    </div>
+                    <div class="md-form mb-3 position-relative">
+                        <label for="email">Your email</label>
+                        <i class="fa fa-envelope position-absolute"></i>
+                        <input type="email" id="modal__email" class="form-control" name="email">
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button class="btn btn-unique" id="send-psw">Send <i class="fa fa-paper-plane-o ml-1"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

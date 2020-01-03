@@ -1,0 +1,650 @@
+<!-- questions -company manager -->
+<table id="questions-admin"
+       data-search="true"
+       data-detail-view="true"
+       data-detail-formatter="detailFormatter"
+       data-search-align="left"
+       data-stickyHeader="true"
+       data-show-columns="true"
+       data-show-toggle="true"
+       data-mobile-responsive="true"
+       data-show-fullscreen="true"
+       data-sort-class="table-active"
+       data-sortable="true"
+       data-pagination="true"
+       data-pagination-pre-text="Previous"
+       data-pagination-next-text="Next"
+       data-pagination-h-align="left"
+       data-pagination-detail-h-align="right"
+       data-page-list="[10, 25, 50, 100, ALL]"
+       data-show-footer="false"
+       data-filter-control="true"
+       data-show-search-clear-button="true"
+       data-show-export="true"
+       data-click-to-select="true"
+       data-show-print="true"
+       data-row-attributes="rowAttributes"
+       >
+    <thead class="thead-dark">
+        <tr> 
+            <th data-field="id" data-align="center" data-filter-control="input">ID</th>
+            <th data-field="type" data-filter-control="select" data-align="center">Type</th>
+            <th data-field="title" class="title" data-filter-control="input" data-align="center">Title</th>
+            <th data-field="description" data-visible="false">Description</th>
+            <th data-field="techData" data-formatter="techDetailsFormatter" data-events="operateEvents" data-sortable="false" 
+                data-align="center">Technical Details
+            </th>
+            <th data-field="asked_by.name" data-sortable="false" 
+                data-formatter="askedByFormatter" 
+                data-align="center" class='position-relative'>Asked by
+            </th>
+            <th data-field="date_opened" data-align="center" data-formatter="dateFormatter" data-sortable="true m7">Opened at</th>
+            <th data-field="date_closed" data-align="center" data-formatter="dateFormatter" data-sortable="true m7">Closed in</th>
+            <th data-field="" data-align="center" data-formatter="advicesFormatter">Advices</th>
+            <th data-field="is_closed" data-sortable="true" data-align="center" data-formatter="statusFormatter">Is Closed</th>
+        </tr>
+    </thead>
+</table>
+<div id="adviceHtml" class="d-none">
+    <table id="advice-table"
+           data-stickyHeader="true"
+           data-mobile-responsive="true"
+           data-pagination="true"
+           data-pagination-pre-text="Previous"
+           data-pagination-next-text="Next"
+           data-page-list="[3, 6, 12, 24, ALL]" 
+           >
+        <thead class="thead-light">
+            <tr> 
+                <th data-field="id" data-align="center">Advice ID</th>
+                <th data-field="title" class="title" data-align="center">Title</th>
+                <th data-field="date_given" data-align="center" data-formatter="dateFormatter">Date</th> 
+                <th data-field="description">Description</th>
+                <th data-field="" data-formatter="adviceDetailsFormatter" data-align="center">Advice Details</th>
+                <th data-field="given_by.name" data-align="center" data-formatter="givenByFormatter">Given by</th>          
+                <th data-field="" data-align="center" data-formatter="commentsFormatter">Comments</th>
+                <th data-field="" data-align="center" data-formatter="rateFormatter">Response</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<!-- The Modal -->
+<div class="modal fade" id="advicesModal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Advice Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="col-md-4 float-left">
+                    <div id="manufacturer-field" class="d-none">
+                        <label for="manufacturer" class="mt-2">Manufacturer:</label>
+                        <input id="manufacturer" type="text" name="manufacturer" readonly class="col-md-12 form-control mb-3" />
+                    </div>    
+                    <label for="title">Title:</label>
+                    <input id="title" type="text" name="title" readonly class="col-md-12 form-control mb-3" required/>
+                    <label for="title">Description:</label>
+                    <textarea id="description" rows="3" readonly maxlength="200" name="description" class="col-md-12 form-control" required></textarea>
+                    <div id="txt-input-counter"></div>
+                    <!-- tool + insert -->
+                    <button type="button" class="btn btn-primary col-md-12 mb-4" aria-expanded="false" data-toggle="collapse" data-target="#tools">
+                        Tools
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                    <div id="tools" class="collapse show">
+                        <label for="tool-designation">Tool designation</label>
+                        <input id="tool-designation" readonly type="text" name="tool_designation" class="col-md-12 form-control"/>
+                        <label for="tool-holder">Tool holder</label>
+                        <input id="tool-holder" readonly type="text" name="tool_holder" class="col-md-12 form-control"/>
+                        <label for="tool-type">Tool type</label>
+                        <input id="tool-type" readonly type="text" name="tool_type" class="col-md-12 form-control"/>
+                        <label for="insert-type">Insert type</label>
+                        <input id="insert-type" readonly type="text" name="insert_type" class="col-md-12 mb-3 form-control"/>
+                    </div>
+                    <button type="button" class="btn btn-primary col-md-12 mb-4" aria-expanded="false" data-toggle="collapse" data-target="#cut">
+                        Cut Properties
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                    <div id="cut" class="collapse show">
+                        <!-- cut -->
+                        <label for="cut-depth">Depth of cut (mm)</label>
+                        <input id="cut-depth" readonly type="number" name="cut_depth" min="0" step="0.1" class="col-md-12 form-control"/>
+                        <label for="cut-depth-finish">Depth of cut roughing (mm)</label>
+                        <input id="cut-depth-finish" readonly type="number" name="cut_depth_finish" min="0" step="0.1" class="col-md-12 form-control"/>
+                        <label for="cut-depth-rough">Depth of cut finishing (mm)</label>
+                        <input id="cut-depth-rough" readonly type="number" name="cut_depth_rough" min="0" step="0.1" class="col-md-12 form-control"/>
+                        <label for="cut-length">Length of cut (mm)</label>
+                        <input id="cut-lengt" readonly type="number" name="cut_length" min="0" step="1" class="col-md-12 form-control"/>
+                        <label for="cut-width">Width of cut (mm)</label>
+                        <input id="cut-width" readonly type="number" name="cut_width" min="0" step="1" class="col-md-12 form-control mb-3"/>
+                    </div>
+                </div>
+                <div class="col-md-4 float-left">
+                    <button type="button" class="btn btn-primary col-md-12 mb-4" aria-expanded="false" data-toggle="collapse" data-target="#diameter">
+                        Diameter
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                    <div id="diameter" class="collapse show">
+                        <!-- diameter -->
+                        <label for="diameter">Diameter (mm)</label>
+                        <input id="diameter" type="number" readonly name="diameter" min="0" max="1000" step="0.1" class="col-md-12 form-control"/>
+                        <label for="diameter-min">Minor diameter (mm)</label>
+                        <input id="diameter-min" readonly type="number" name="diameter_min" min="0" max="1000" step="0.1" class="col-md-12 form-control"/>
+                        <label for="diameter-max">Major diameter (mm)</label>
+                        <input id="diameter-max" readonly type="number" name="diameter_max" min="0" max="1000" step="0.1" class="col-md-12 form-control mb-3"/>
+                    </div>
+                    <button type="button" class="btn btn-primary col-md-12 mb-4" aria-expanded="false" data-toggle="collapse" data-target="#feed">
+                        Feed
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                    <div id="feed" class="collapse show">
+                        <!-- feed -->
+                        <label for="feed">Feed (mm/rev)</label>
+                        <input id="feed" readonly type="number" name="feed" min="0" step="1" class="col-md-12 form-control"/>
+                        <label for="feed-finish">Feed finishing (mm/rev)</label>
+                        <input id="feed-finish" readonly type="number" name="feed_finish" min="0" step="1" class="col-md-12 form-control"/>
+                        <label for="feed-per-tooth">Feed per tooth (mm/t)</label>
+                        <input id="feed-per-tooth" readonly type="number" name="feed_per_tooth" min="0" step="0.01" class="col-md-12 form-control"/>
+                        <label for="feed-rough">Feed roughing (mm/rev)</label>
+                        <input id="feed-rough" readonly type="number" name="feed_rough" min="0" step="1" class="col-md-12 form-control"/>
+                        <label for="feed-table">Table Feed (mm/min)</label>
+                        <input id="feed-table" readonly type="number" name="feed_table" min="0" step="1" class="col-md-12 form-control"/>
+                        <label for="feed-to-center">Feed to center (mm)</label>
+                        <input id="feed-to-center" readonly type="number" name="feed_to_center" min="0" step="1" class="col-md-12 mb-3 form-control"/>
+                    </div>
+                    <button type="button" class="btn btn-primary col-md-12 mb-4" aria-expanded="false" data-toggle="collapse" data-target="#machine">
+                        Machine
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                    <div id="machine" class="collapse show">
+                        <!-- machine -->
+                        <label for="machine-depth">Machine depth (mm)</label>
+                        <input id="machine-depth" readonly type="number" name="machine_depth" min="0" step="10" class="col-md-12 form-control"/>
+                        <label for="machine-length">Machining length (mm)</label>
+                        <input id="machine-length" readonly type="number" name="machine_length" min="0" step="10" class="col-md-12 mb-3 form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-4 float-left">
+                    <button type="button" class="btn btn-primary col-md-12 mb-4" aria-expanded="false" data-toggle="collapse" data-target="#speed">
+                        Speed
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                    <div id="speed" class="collapse show">
+                        <!-- speed -->
+                        <label for="rpm-const">Constant RPM</label>
+                        <input id="rpm-const" readonly type="number" name="rpm_const" min="0" step="10" class="col-md-12 form-control"/>
+                        <label for="rpm-max">Max RPM</label>
+                        <input id="rpm-max" readonly type="number" name="rpm_max" min="0" step="10" class="col-md-12 form-control"/>
+                        <label for="speed-cut">Cutting speed (m/min)</label>
+                        <input id="speed-cut" readonly type="number" name="speed_cut" min="0" step="1" class="col-md-12 form-control"/>
+                        <label for="speed-cut-finish">Cutting speed finishing (m/min)</label>
+                        <input id="speed-cut-finish" readonly type="number" name="speed_cut_finish" min="0" step="1" class="col-md-12 form-control"/>
+                        <label for="speed-cut-rough">Cutting speed roughing (m/min)</label>
+                        <input id="speed-cut-rough" readonly type="number" name="speed_cut_rough" min="0" step="1" class="col-md-12 form-control"/>
+                        <label for="speed-spindle">Spindle speed</label>
+                        <input id="speed-spindle" readonly type="number" name="speed_spindle" min="0" step="1" class="col-md-12 mb-3 form-control"/>
+                    </div>
+                    <button type="button" class="btn btn-primary col-md-12 mb-4" aria-expanded="false" data-toggle="collapse" data-target="#teeth">
+                        Teeth
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                    <div id="teeth" class="collapse show">
+                        <!-- teeth -->
+                        <label for="teeth-effect-num">Effective № of teeth</label>
+                        <input id="teeth-effect-num" readonly type="number" name="teeth_effect_num" min="0" max="100" step="1" class="col-md-12 form-control"/>
+                        <label for="teeth-total-num">Total № of teeth</label>
+                        <input id="teeth-total-num" readonly type="number" name="teeth_total_num" min="0" max="100" step="1" class="col-md-12 mb-3 form-control"/>
+                    </div>
+                    <button type="button" class="btn btn-primary col-md-12 mb-4" aria-expanded="false" data-toggle="collapse" data-target="#other">
+                        Other
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                    <div id="other" class="collapse show">
+                        <!-- other -->
+                        <label for="chip-thickness">Avg. chip thickness</label>
+                        <input id="chip-thickness" readonly type="number" name="chip_thickness" min="0" max="10" step="0.1" class="col-md-12 form-control"/>
+                        <label for="coolant-type">Coolant type</label>
+                        <input id="coolant-type" readonly type="text" name="coolant_type" class="col-md-12 form-control"/>
+                        <label for="edge-preparation">Edge preparation</label>
+                        <input id="edge-preparation" readonly type="text" name="edge_preparation" class="col-md-12 form-control"/>
+                        <label for="grade">Grade</label>
+                        <input id="grade" type="text" readonly name="grade" class="col-md-12 form-control"/>
+                        <label for="overhang">Overhang (mm)</label>
+                        <input id="overhang" readonly type="number" name="overhang" min="0" step="1" class="col-md-12 form-control"/>
+                        <label for="passes">Number of passes</label>
+                        <input id="passes" readonly type="number" name="passes" min="0" max="100" step="1" class="col-md-12 form-control"/>
+                        <label for="pieces-per-cut-edge">Pieces per cutting edge</label>
+                        <input id="pieces-per-cut-edge" readonly type="number" name="pieces_per_cut_edge" min="0" max="1000" step="5" class="col-md-12 mb-3 form-control"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="user-details">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">User Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="card user-info"><img class="card-img-top" alt="user details" src="Content/images/user_pictures/"/>
+                    <div class="card-body">
+                        <h5 class="card-title text-primary"></h5>
+                        <div class="card-text">
+                            <div><b>Email: </b><span class="email"></span></div>
+                            <div><b>Username: </b><span class="username"></span></div>
+                            <div><b>Type: </b><span class="type"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="fill-question" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title blue">Question Parameters</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="question-form" class="was-validated" novalidate>
+                    <div class="col-md-4 float-left">
+                        <label for="title">Title:</label>
+                        <input class="form-control mb-3" id="title" type="text" name="title" required/> 
+                        <label for="description">Description:</label>
+                        <textarea class="form-control mb-3" id="description" required></textarea>
+                        <h2 class="blue font-weight-bold">Machine</h2>
+                        <div class="form-group mb-3">
+                            <label for="machine-type" class="mb-2 col-md-12 font-weight-bold title p-2 mt-3">Machine type:</label>
+                            <select class="form-control" name="machine_type" id="machine-type" required>
+                                <option value="" selected disabled>Select type</option>
+                                <option value="milling">Milling</option>
+                                <option value="turning">Turning</option>
+                            </select>
+                        </div>
+                        <div class="main-details form-group">
+                            <label for="machine-power" class="col-md-12 p-0">Power (KW): 
+                                <input class="float-right col-md-5 form-control mb-3" disabled='true' required id="machine-power" type="number" name="machine_power" min="0.1" max="100" step="0.05" /></label>
+                            <label for="machine-max-rpm" class="col-md-12 p-0">Max RPM:
+                                <input class="col-md-5 float-right form-control mb-3" disabled='true' required type="number" name="machine_max_rpm" id="machine-max-rpm" min="50" max="20000" step="50" /> </label>
+                            <label class="mb-2 col-md-12 font-weight-bold title p-2">Adaptation</label>
+                            <label for="adaptation-type" class="float-left col-md-2 pl-0">Type:</label>                           
+                            <select class="form-control mb-3 col-md-4 float-left" disabled='true' id="adaptation-type" name="adaptation_type" required>
+                                <option value="" selected disabled>Select type</option>
+                                <option value="square">Square</option>
+                            </select>
+                            <label for="adaptation-size" class="float-left col-md-2">Size: </label>            
+                            <input class="form-control mb-3 col-md-3 float-right" disabled='true' id="adaptation-size" type="number" name="adaptation_size" min="0.1" max="1" step="0.01" required/>
+                        </div>
+                        <div class="specific-details turning mb-3" id="adaptation-direction">
+                            <div class="radio col-md-6 float-left pl-0">
+                                <label><input type="radio" name="adaptation_direction" value="left" checked>Left hand</label>
+                            </div>
+                            <div class="radio col-md-6 float-right pr-0 pl-0">
+                                <label class="float-right"><input type="radio" name="adaptation_direction" value="right">Right hand</label>
+                            </div>
+                        </div>
+                        <div class="specific-details grooving parting mb-3" id="adaptation-tool-type">
+                            <div class="radio">
+                                <label><input type="radio" name="adaptation_tool_type" value="perpendicular" checked>Perpendicular tool</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="adaptation_tool_type" value="radial">Radial tool</label>
+                            </div>
+                        </div>
+                        <div class="specific-details hole-making mb-3" id="coolant_type">
+                            <label class="font-weight-bold underline">Coolant:</label>
+                            <div class="radio">
+                                <label><input type="radio" name="coolant_type" value="Internal" checked>Internal</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="coolant_type" value="External">External</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 float-left pl-1 pr-1 application">
+                        <h2 class="blue font-weight-bold">Application</h2>
+                        <div class="form-group mb-3 main-details">
+                            <label for="q-type1" class="title bold p-2 col-md-12">Machine type:</label>
+                            <select class="form-control mb-3" name="question_type1" id="q-type1" required>
+                                <option value="" selected disabled>Select type</option></select>
+                            <select class="form-control mb-3" name="question_type2" id="q-type2" required></select>
+                            <select class="form-control" name="question_type3" id="q-type3" required></select>             
+                            <label for="material-type" class="title bold p-2 col-md-12 mt-3">Material:</label>
+                            <select class="form-control" name="material_type" id="material-type" required >
+                                <option value="" selected disabled>Select type</option>
+                                <option value="Iron">Iron</option>
+                                <option value="Aluminum">Aluminum</option>
+                                <option value="Steel">Steel</option>
+                                <option value="Copper">Copper</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="material-details form-group">
+                            <div class="col-md-6 float-left pl-0 pr-0">
+                                <label for="material-hb">HB: </label>
+                                <input class="form-control float-left" type="number" id="material-hb" name="material_hb" min="10" max="1500" step="5" required/>
+                            </div>
+                            <div class="col-md-6 float-right pl-0 pr-0">
+                                <label for="material-hrc">HRC: </label>
+                                <input class="form-control float-left" id="material-hrc" type="number" name="material_hrc" min="20" max="100" step="1" required/>
+                            </div>
+                        </div>
+                        <div class="main-details form-group mb-3" id="clamping">
+                            <label class="font-weight-bold title p-2 mt-3 col-md-12">Stability details</label>      
+                            <label class="underline font-weight-bold col-md-12 pl-0">Clamping: </label>
+                            <div class="radio pl-0">
+                                <label><input type="radio" name="clamping" value="stable" checked>stable</label></div>
+                            <div class="radio pl-0">
+                                <label><input type="radio" name="clamping" value="normal">normal</label>
+                            </div>
+                            <div class="radio pl-0">
+                                <label><input type="radio" name="clamping" value="unstable">unstable</label>
+                            </div>
+                        </div>   
+                        <div class="specific-details turning hole-making" id="cut-type">
+                            <label class="underline font-weight-bold">Type of cut: </label>
+                            <div class="radio">
+                                <label><input type="radio" name="cut_type" value="continuous" checked>continuous</label></div>
+                            <div class="radio">
+                                <label><input type="radio" name="cut_type" value="interrupted">interrupted</label>
+                            </div>
+                        </div>
+                        <div class="specific-details milling" id="overhang">
+                            <label class="underline font-weight-bold col-md-12 pl-0">Overhang: </label>
+                            <div class="radio col-md-4 float-left pl-0">
+                                <label><input type="radio" name="overhang" value="short" checked>short</label></div>
+                            <div class="radio col-md-3 float-left pl-0">
+                                <label><input type="radio" name="overhang" value="long">long</label></div>
+                            <div class="radio col-md-5 float-left pl-0">
+                                <label><input type="radio" name="overhang" value="very-long">very-long</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="specific-details parameters col-md-4 float-right">
+                        <h2 class="blue font-weight-bold">Parameters</h2>
+                        <label class="hole-making" for="boring-diameter">D (boring diameter): <input type="number" class="form-control col-md-12" id="boring-diameter" name="boring_diameter" min="0" required/></label>
+                        <label class="grooving-face" for="diameter_depth_in">Depth in inner diameter: <input type="number" class="form-control col-md-12" id="diameter-depth-in" name="diameter_depth_in" min="0" required/></label>
+                        <label class="grooving-face" for="diameter-depth-out">Depth in outer diameter: <input type="number" class="form-control col-md-12" id="diameter-depth-out" name="diameter_depth_out" min="0" required/></label>
+                        <label class="grooving-face" for="w_groove">W groove width: <input type="number" class="form-control col-md-12" id="w_groove" name="diameter_depth_out" min="0" required /></label>
+                        <label class="parting grooving-face" for="diameter_outer">D outer diameter: <input type="number" class="form-control col-md-12" id="diameter-outer" name="diameter_outer" min="0" required /></label>
+                        <label class="parting" for="diameter-internal">d internal diameter: <input type="number" class="form-control col-md-12" id="diameter-internal" name="diameter_internal" min="0" required /></label>
+                        <label class="hole-making grooving-internal" for="hole-diameter">D (hole diameter): <input class="form-control col-md-12" type="number" id="hole-diameter" name="hole_diameter" min="0" required /></label>
+                        <label class="grooving-external" for="workpiece-diameter">Workpiece diameter: <input class="form-control col-md-12" type="number" id="workpiece-diameter" name="workpiece_diameter" min="0" required /></label>
+                        <label class="grooving-external">Width of groove: <input type="number" class="form-control" name="groove_width" id="groove-width" min="0" required /></label>
+                        <label class="grooving-external grooving-internal">Depth of groove: <input type="number" class="form-control" name="groove_depth" id="groove-depth" min="0" required /></label>
+                        <label class="iso-turning" for="diameter">D (diameter) <input type="number" class="form-control col-md-12" id="diameter" name="diameter" min="0" required /></label>
+                        <div class="grooving-face mb-3" id="face-groove-type">
+                            <div class="radio">
+                                <label><input type="radio" name="face_groove_type" value="external" checked>External</label></div>
+                            <div class="radio">
+                                <label><input type="radio" name="face_groove_type" value="next-to-shaft">Next to shaft's</label></div>
+                            <div class="radio">
+                                <label><input type="radio" name="face_groove_type" value="internal">Internal</label></div>
+                        </div>
+                        <div class="grooving-internal mb-3 form-group">
+                            <label>Groove position: <input type="number" class="form-control" name="groove_position" id="groove-position" min="0" required /></label>
+                        </div>
+                        <div class="milling mb-3 form-group">
+                            <label>Ap (depth of shoulder): <input type="number" class="form-control" name="shoulder_depth" id="shoulder-depth" min="0" required /></label>
+                            <label>Ae (width of shoulder): <input type="number" class="form-control" name="shoulder_width" id="shoulder-width" min="0" required /></label>
+                            <label>L (length of shoulder): <input type="number" class="form-control" name="shoulder_length" id="shoulder-length" min="0" required /></label>
+                        </div>
+                        <label class="iso-turning grooving-external">
+                            Ap (depth of cut): 
+                            <input type="number" class="form-control col-md-12" name="cut_depth" min="0" required id="cut-depth"/>
+                        </label>
+                        <label class="isoTurning">L (cutting length): 
+                            <input type="number" class="form-control col-md-12" name="cut_length" min="0" required id="cut-length"/>
+                        </label>
+                        <div class="iso-turning form-group" id="operation-type">
+                            <label class="p-0">Rmax: <input class="form-control col-md-12" type="number" id="r-max" name="r_max" min="0" required />
+                            </label>
+                            <label class="iso-turning-internal">L2 (penetration length): <input class="form-control col-md-12" type="number" name="penetration_length" min="0" id="penetration-length" required />
+                            </label>
+                            <label class="mb-2 col-md-12 font-weight-bold title p-2 mt-3">Operation type:</label>
+                            <div class="radio">
+                                <label><input type="radio" name="operation_type" value="finishing" checked>finishing</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="operation_type" value="medium">medium</label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="operation_type" value="roughing">roughing</label>
+                            </div>
+                        </div>
+                        <label class="hole-making">Depth: <input class="form-control col-md-12" type="number" name="depth" min="0" required id="depth">
+                        </label>
+                        <label class="parting">L part length: <input class="form-control col-md-12" type="number" name="part_length" id="part-length" min="0" required/>
+                        </label>
+                        <label class="iso-turning-internal">L2 (penetration length): <input class="form-control col-md-12" type="number" name="penetration_length" min="0" required/>
+                        </label>
+                        <label class="milling grooving">Corner radius: 
+                            <input class="form-control col-md-12" type="number" name="corner_radius" min="0" id="corner-radius" required/>
+                        </label>
+                        <div class="iso-turning grooving-internal grooving-external form-group">
+                            <label class="mb-2 col-md-12 font-weight-bold title p-2 mt-3">Surface quality</label>
+                            <label class="col-md-6 pl-0 float-left">N: <input class="form-control d-inline-block col-md-7 float-right" type="number" id="surface-quality-n" name="surface_quality_n" min="0" max="100" step="1" required/></label>
+                            <label class="col-md-6 pr-0">Rt: <input class="form-control d-inline-block col-md-7 float-right" type="number" name="surface_quality_rt" id="surface-quality-rt" min="0" max="100" step="1" required /></label>
+                            <label class="col-md-6 pl-0 float-left">Ra: <input class="form-control d-inline-block col-md-7 float-right" type="number" name="surface_quality_ra" id="surface-quality-ra" min="0" max="100" step="1" required/></label>
+                            <label class="col-md-6 pr-0">RMS: <input class="form-control d-inline-block col-md-7 float-right" type="number" name="surface_quality_rms" id="surface-quality-rms" min="0" max="100" step="1" required/></label>
+                        </div>
+                        <div class="grooving mb-3 form-group">
+                            <label class="mb-2 col-md-12 font-weight-bold title p-2 mt-3">Tolerance & Radius</label>
+                            <div class="float-left pl-0">
+                                <label class="col-md-12 pl-0">W-Tolerance: </label>
+                                <label class="float-left col-md-5 pl-0">Min <input class="form-control col-md-12" type="number" name="tolerance_w_min" id="tolerance-w-min" min="0" max="100" step="1" required/></label>
+                                <label class="float-right col-md-5 pl-0">Max <input class="form-control col-md-12" type="number" name="tolerance_w_max" id="tolerance-w-max" min="0" max="100" step="1" required/></label>
+                            </div>
+                            <div class="pl-0">
+                                <label class="col-md-12 pl-0">R-Tolerance:</label> 
+                                <label class="float-left col-md-5 pl-0">Min <input class="form-control col-md-12" type="number" name="tolerance_r_min" id="tolerance-r-min" min="0" max="100" step="1" required/></label>
+                                <label class="float-right col-md-5 pl-0">Max <input class="form-control col-md-12" type="number" name="tolerance_r_max" id="tolerance-r-max" min="0" max="100" step="1" required/></label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger float-left" data-dismiss="modal" id="cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="chat-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Chat</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="add-response">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Response</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <label for="title" class="col-md-12">Title:
+                    <input class="form-control mb-3" id="title" readonly type="text" name="title" required placeholder="response title..."/></label> 
+                <label for="description" class="col-md-12">Description: 
+                    <textarea class="form-control" id="description" readonly rows="3" maxlength="200" required></textarea>                                             
+                    <span id="txt-input-counter2"></span>
+                </label> 
+                <label for="score" class="col-md-6 mx-auto d-block">Score: 
+                    <select class="form-control float-right col-md-7" disabled name="machine_type" id="score" required>
+                        <option value="" selected disabled></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </label>
+                <label for="best-advice" style="cursor:pointer" class="form-check-label align-middle mx-auto d-block mt-4 col-md-8" data-toggle="tooltip" data-placement="bottom" 
+                       title="Only one response can be selected as 'best advice' per question">Is a Best Advice*
+                    <input class="toggle btn btn-primary btn-sm float-right" disabled id="best-advice" type="checkbox" data-on="yes" data-off="no" data-toggle="toggle" data-onstyle="primary" data-offstyle="secondary"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+    // Rows attributes
+    function rowAttributes(row, index) {
+        return {
+            'data-toggle': 'popover',
+            'data-placement': 'auto',
+            'data-trigger': 'hover',
+            'data-content': [
+                'Description: ' + row.description
+            ].join(', ')
+        };
+    }
+
+    // Asked by cell formatter
+    function askedByFormatter(value, row) {
+        return '<span> ' + value + '</span><i class="fa fa-info-circle" data-user="' + encodeURIComponent(JSON.stringify(row.asked_by ? row.asked_by : [])) + '" style="padding-left:10px" onclick="userModal(this)"></i>';
+    }
+    
+    // Given by cell formatter
+    function givenByFormatter(value, row) {
+        return '<span> ' + value + '</span><i class="fa fa-info-circle" data-user="' + encodeURIComponent(JSON.stringify(row.given_by ? row.given_by : [])) + '" style="padding-left:10px" onclick="userModal(this)"></i>';
+    }
+    
+    // User details modal
+    function userModal(object) {
+        if (object) {
+            var row = JSON.parse(decodeURIComponent(object.attributes["data-user"].value));
+            var img = 'Content/images/user_pictures/' + (row ? row.picture : 'default.png');
+            $('#user-details .card-img-top').prop('src', img);
+            $('#user-details .card-title').text(row ? row.name : "");
+            $('#user-details .card-text .email').text(row ? row.email : "");
+            $('#user-details .card-text .username').text(row ? row.username : "");
+            $('#user-details .card-text .type').text(row ? row.type : "");
+            $('#user-details').modal("show");
+        }
+    }
+    
+    // Question status cell formatter
+    function statusFormatter(value, row) {
+        if (value === true) {
+            return '<i class="fa fa-lock"></i><span class="d-none">Closed</span>';
+        } else {
+            return '<i class="fa fa-unlock-alt disabled"></i><span class="d-none">Opened</span>';
+        }
+    }
+    
+    // Question TD button formatter
+    function techDetailsFormatter(value, row) {
+        return '<i class="fa fa-save tech-data" data-userid="' + row.id + '"></i>';
+    }
+    
+    // Advices cell formatter
+    function advicesFormatter(value, row) {
+        return '<i class="fa fa-file-text advice-data' + (row.has_advices ? "" : " disabled") + '" data-userid=' + row.id + '></i>';
+    }
+    
+    // Question description popover
+    $(function () {
+        $('#questions-admin').on('post-body.bs.table', function (e) {
+            $('[data-toggle="popover"]').popover({
+                selector: '.title'
+            });
+        });
+
+    });
+    
+    // Question TD modal
+    window.operateEvents = {
+        'click .tech-data': function (e, value, row, index) {
+            var modal = $('#fill-question');
+            $('#fill-question #title').val(row.title);
+            $('#fill-question #description').val(row.description);
+            var type = row.type.split(" ");
+            $('#fill-question #q-type1').append($('<option selected>', {value: type[0].toLowerCase()}).text(type[0]));
+            if (type.length > 2) {
+                $('#fill-question #q-type2').append($('<option selected>', {value: type[1].toLowerCase()}).text(type[1]));
+                $('#fill-question #q-type3').append($('<option selected>', {value: type[2].toLowerCase()}).text(type[2]));
+            } else {
+                $('#fill-question #q-type2').append($('<option selected>', {value: type[1].toLowerCase()}).text(type[1]));
+                $('#fill-question #q-type3').fadeOut();
+            }
+        }
+    };
+    
+    // Date cell formatter
+    function dateFormatter(value, row) {
+        
+        if (value) {
+            var date = new Date(value);
+            return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' ' + (date.getHours()<10 ? '0' + date.getHours() : date.getHours()) + ':' + (date.getMinutes()<10 ? '0' + date.getMinutes() : date.getMinutes());
+        } else {
+            return '-';
+        }
+        
+    }
+    
+    // Advices sub-table
+    function detailFormatter() {
+        var data = window.ajaxReceivedContent.advices;
+        $('#advice-table').bootstrapTable('destroy');
+        $('#advice-table').bootstrapTable({
+            data: data ? data : [],
+            exportTypes: ['excel', 'pdf'],
+            exportDataType: 'all'
+        });
+
+        var html = $('#adviceHtml').html();
+        return html;
+    }
+    
+    // Comments button formatter
+    function commentsFormatter(value, row) {
+        return '<i class="fa fa-comments-o getComments" style="cursor:pointer" data-userid="' + row.id + '"></i>';
+    }
+    
+    // Response cell formatter
+    function rateFormatter(value, row) {
+        if (row.has_response) {
+            return '<i class="fa fa-star getResponse" style="cursor:pointer" data-userid="' + row.id + '"></i>';
+        }
+        return '-';
+    }
+    
+    // Advice TD cell formatter
+    function adviceDetailsFormatter(value, row) {
+        return '<i class="fa fa-save advice-detail" data-userid="' + row.id + '"></i>';
+    }
+    
+    // Is best advice toggle button
+    $('#best-advice').bootstrapToggle();
+</script>
