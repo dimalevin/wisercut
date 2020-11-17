@@ -9,7 +9,6 @@ $json_data = null;
 // controller has not been initialized
 if (!isset($_SESSION['controller'])) {
     $_SESSION['controller'] = new GeneralController();
-    $_SESSION['session_start'] = date(DATE_ATOM);
 } else {
     
     if (isset($_POST['data'])) {
