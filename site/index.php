@@ -2,10 +2,6 @@
 
 require_once __DIR__.'/SystemServices/ClassLoader.php';
 
-if (!defined('LOCALHOST')) {
-    define('LOCALHOST', $_SERVER['REMOTE_ADDR'] == '::1');
-}
-
 session_start();
 
 $json_data = null;
